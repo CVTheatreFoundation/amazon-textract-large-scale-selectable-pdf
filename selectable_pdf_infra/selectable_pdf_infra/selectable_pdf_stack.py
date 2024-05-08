@@ -169,7 +169,7 @@ class SelectablePdfStack(Stack):
         start_textract_lambda.add_event_source(
             source=aws_lambda_event_sources.S3EventSource(
                 bucket=self.doc_bucket, 
-                events=[aws_s3.EventType.OBJECT_CREATED_PUT], 
+                events=[aws_s3.EventType.OBJECT_CREATED_PUT, aws.s3.EventType.OBJECT_CREATED_COMPLETE_MULTIPART_UPLOAD], 
                 filters=[aws_s3.NotificationKeyFilter(prefix=None, suffix='.pdf')]
             )
         )
