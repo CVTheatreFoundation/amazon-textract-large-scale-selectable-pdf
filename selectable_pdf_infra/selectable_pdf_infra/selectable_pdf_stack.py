@@ -139,7 +139,7 @@ class SelectablePdfStack(Stack):
 
         # lambda function starting textract. The lambda is triggered with a S3 PUT 
         # notification
-        lambda_timeout_sec = 1 * 60  #1 minute 
+        lambda_timeout_sec = 2 * 60  #2 minutes
         start_textract_lambda = aws_lambda.Function(
             self,
             id='StartTextract',
@@ -155,7 +155,8 @@ class SelectablePdfStack(Stack):
                 'DDB_DOCUMENTS_TABLE': self.ddb_documents_table.table_name,
             },
             retry_attempts=0,
-            memory_size=128,  #128MB
+            memory_size=256, # In MB
+            reservedConcurrentExecutions=5, # Textract API limits for evaluate document are rather low. If you exceed it, it'll fail to process documents and they'll just never get processed due to our infra.
         )
         # add the required policies to the default role creation with the lambda 
         # start_textract_lambda
@@ -209,7 +210,8 @@ class SelectablePdfStack(Stack):
                 'TEXTRACT_RES_QUEUE_URL': processed_textracted_queue_sqs.queue_url
             },
             retry_attempts=0, 
-            memory_size=3000,
+            memory_size=2000, # In MB
+            reservedConcurrentExecutions=20, # Less risk of API limits being reached here.
         )
         # add the required policies to the default role create with the lambda
         process_textract_lambda.role.add_managed_policy(
@@ -245,11 +247,11 @@ class SelectablePdfStack(Stack):
                 'LOG_LEVEL': 'INFO',
                 'ADD_WORD_BBOX': '0',
                 'SHOW_CHARACTER': '0',
-                'PDF_IMAGE_DPI': '200',
+                'PDF_IMAGE_DPI': '300',
 
             },
             retry_attempts=0,
-            memory_size=2048
+            memory_size=2000 # This loads the full PDF into memory to amalgamate with the textract data. If you have large PDFs, you might need more memory here.
         )
         # add the required policies to the default role creation with the lambda
         selectable_pdf_lambda.role.attach_inline_policy(ddb_documents_table_policy)
