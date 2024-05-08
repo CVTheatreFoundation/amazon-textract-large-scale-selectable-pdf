@@ -47,12 +47,11 @@ def lambda_handler(event, context):
     logger.info('event: {}'.format(event))
     args = parse_args(event)
 
-    # Get AWS connectors. The SQS client need the legacy endpoint, but when calling
-    # a queue with the client, the queue URL must have the new endpoint:
+    # Get AWS connectors.
     # https://docs.aws.amazon.com/general/latest/gr/sqs-service.html#sqs_region
     ddb_doc_table = ProcessingDdbTable(args['ddb_documents_table'])
-    sqs_legacy_endpoint_url = f"https://{args['region']}.queue.amazonaws.com"
-    sqs_client = boto3.client('sqs', endpoint_url=sqs_legacy_endpoint_url)
+    sqs_endpoint_url = f"https://sqs.{args['region']}.amazonaws.com"
+    sqs_client = boto3.client('sqs', endpoint_url=sqs_endpoint_url)
 
     # for each job (generally, only one per sns message):
     # 1. get the textract blocks
@@ -106,7 +105,7 @@ def lambda_handler(event, context):
                 MessageBody=json.dumps(tt_job_info),
             )
         except Exception as ex:
-            logger.error(f"Cannot send message to SQS queue {args['textract_res_queue_url']}")
+            logger.error(f"Cannot send message to SQS queue {args['textract_res_queue_url']}, client endpoint configured {sqs_endpoint_url}")
             raise ex
 
 
