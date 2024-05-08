@@ -8,7 +8,7 @@ scanned PDFs (i.e. where the text cannot be selected) into Selectable PDF
 
 To deploy this stack, you need:
 * An AWS account
-* Python 3.6 or higher
+* Python 3.8 or higher: [Lambda Python Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 * [AWS CLI](https://aws.amazon.com/cli/): configured with` AWS configure`
 * [AWS CDK](https://aws.amazon.com/cdk/): version 2.X or higher
 
@@ -25,6 +25,13 @@ To create the virtualenv it assumes that there is a `python3` executable in your
 path with access to the `venv` package. If for any reason the automatic creation 
 of the virtualenv fails, you can create the virtualenv manually once the init 
 process completes.
+
+
+> [!IMPORTANT]
+> The virtualenv you create in the following step should match the Python version that the
+lambdas will utilize. A mismatch between the local build and the lambda run
+will result in dependency errors with PyMuPDFlike [this](https://github.com/keithrozario/Klayers/issues/168).
+
 
 To manually create a virtualenv on MacOS and Linux:
 ```
