@@ -56,7 +56,7 @@ def make_pdf_doc_searchable(
     textract_blocks: List[Dict[str, Any]],
     add_word_bbox: bool=False,
     show_selectable_char: bool=False,
-    pdf_image_dpi: int=200,
+    pdf_image_dpi: int=300,
     verbose: bool=False,
 ) -> fitz.Document:
     '''
