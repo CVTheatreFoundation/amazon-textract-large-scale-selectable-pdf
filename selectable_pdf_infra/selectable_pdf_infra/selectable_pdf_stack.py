@@ -156,7 +156,7 @@ class SelectablePdfStack(Stack):
             },
             retry_attempts=0,
             memory_size=256, # In MB
-            reservedConcurrentExecutions=5, # Textract API limits for evaluate document are rather low. If you exceed it, it'll fail to process documents and they'll just never get processed due to our infra.
+            #reservedConcurrentExecutions=5, # Textract API limits for evaluate document are rather low. If you exceed it, it'll fail to process documents and they'll just never get processed due to our infra.
         )
         # add the required policies to the default role creation with the lambda 
         # start_textract_lambda
@@ -193,7 +193,7 @@ class SelectablePdfStack(Stack):
                 resources=[processed_textracted_queue_sqs.queue_arn])]
         )
 
-        lambda_timeout_sec = 5 * 60
+        lambda_timeout_sec = 2 * 60
         process_textract_lambda = aws_lambda.Function(
             self,
             id='ProcessTextract',
@@ -211,7 +211,7 @@ class SelectablePdfStack(Stack):
             },
             retry_attempts=0, 
             memory_size=2000, # In MB
-            reservedConcurrentExecutions=20, # Less risk of API limits being reached here.
+            #reservedConcurrentExecutions=20, # Less risk of API limits being reached here.
         )
         # add the required policies to the default role create with the lambda
         process_textract_lambda.role.add_managed_policy(
