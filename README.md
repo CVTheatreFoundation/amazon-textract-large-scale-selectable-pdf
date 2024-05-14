@@ -1,4 +1,21 @@
-# amazon-textract-large-scale-selectable-pdf
+# CVTheatre Foundation PDF Extraction Infrastructure
+The infrastructure example provided here by AWS is what we use to convert large batches
+of scanned historical PDFs into searchable PDF/A using AWS Textract. 
+
+We found that it's much more cost effective to utilize Textract than attempting to use
+a less powerful built-in OCR tool in open source document management platforms.
+
+Performing the OCR at this levels allows us to physcially embed the searchable text within
+the PDF, allowing raw downloads and document management platforms to easily search through
+them without needing stronger CPU performance to perform on-device OCR.
+
+We've made several changes to the example provided by AWS to meet the needs of our larger
+PDF collections. We've submitted PRs to the parent repo to fix issues as we come across them
+in the hopes of making this easier for all. However, this fork will diverge from the main
+example to provide better tuned and resilient processing of PDFs.
+
+
+## AWS Example
 
 This repository contains an application which converts non-selectable PDF's to 
 selectable PDF's. A non-selectable PDF does not allow text selection, meaning the 

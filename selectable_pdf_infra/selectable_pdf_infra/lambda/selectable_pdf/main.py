@@ -160,7 +160,7 @@ def parse_args(event: Dict) -> Dict:
     args['log_level'] = os.getenv('LOG_LEVEL', default='INFO')
     args['add_word_bbox'] = os.getenv('ADD_WORD_BBOX', default=False)
     args['show_character'] = os.getenv('SHOW_CHARACTER', default=False)
-    args['pdf_image_dpi'] = os.getenv('PDF_IMAGE_DPI', default='200')
+    args['pdf_image_dpi'] = os.getenv('PDF_IMAGE_DPI', default='300')
     args['final_sns_topic_arn'] = os.getenv('FINAL_SNS_TOPIC_ARN', default=None)
     
 
